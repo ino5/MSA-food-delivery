@@ -8,6 +8,19 @@
             <div>
                 <String label="ProductId" v-model="item.productId" :editMode="editMode" @change="change" />
             </div>
+            <StringManager offline label="Options" v-model="item.options" :editMode="false" @change="change" />
+            <div>
+                <String label="Addres" v-model="item.addres" :editMode="editMode" @change="change" />
+            </div>
+            <div>
+                <String label="CustomerId" v-model="item.customerId" :editMode="editMode" @change="change" />
+            </div>
+            <div>
+                <String label="StoreId" v-model="item.storeId" :editMode="editMode" @change="change" />
+            </div>
+            <div>
+                <String label="CouponId" v-model="item.couponId" :editMode="editMode" @change="change" />
+            </div>
         </v-card-text>
 
         <v-card-actions>

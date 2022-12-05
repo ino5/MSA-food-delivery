@@ -20,6 +20,9 @@
             <div>
                 <String label="StoreId" v-model="item.storeId" :editMode="editMode" @change="change" />
             </div>
+            <div>
+                <String label="IsCanceled" v-model="item.isCanceled" :editMode="editMode" @change="change" />
+            </div>
         </v-card-text>
 
         <v-card-actions>

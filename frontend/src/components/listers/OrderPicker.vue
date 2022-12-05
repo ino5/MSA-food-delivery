@@ -17,6 +17,21 @@
                             <v-list-item-subtitle>
                                 ProductId :  {{item.productId }}
                             </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                Options :  {{item.options }}
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                Addres :  {{item.addres }}
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                CustomerId :  {{item.customerId }}
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                StoreId :  {{item.storeId }}
+                            </v-list-item-subtitle>
+                            <v-list-item-subtitle>
+                                CouponId :  {{item.couponId }}
+                            </v-list-item-subtitle>
                         </v-list-item-content>
 
                         <v-list-item-action>
@@ -68,6 +83,16 @@
                 if(val != undefined) {
                     var arr = this.list[val]._links.self.href.split('/');
                     obj['id'] = arr[4]; 
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     
                     
                     

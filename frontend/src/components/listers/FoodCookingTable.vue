@@ -72,6 +72,7 @@
                     { text: "orderId", value: "orderId" },
                     { text: "options", value: "options" },
                     { text: "storeId", value: "storeId" },
+                    { text: "isCanceled", value: "isCanceled" },
                 ],
             foodCooking : [],
             newValue: {},
@@ -94,6 +95,7 @@
                 'orderId': '',
                 'options': '',
                 'storeId': '',
+                'isCanceled': '',
             }
         },
         methods: {

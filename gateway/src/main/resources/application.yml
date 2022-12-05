@@ -24,6 +24,10 @@ spring:
           uri: http://localhost:8084
           predicates:
             - Path=, /mypages/**
+        - id: coupon
+          uri: http://localhost:8085
+          predicates:
+            - Path=/coupons/**, 
         - id: frontend
           uri: http://localhost:8080
           predicates:
@@ -63,6 +67,10 @@ spring:
           uri: http://customer:8080
           predicates:
             - Path=, /mypages/**
+        - id: coupon
+          uri: http://coupon:8080
+          predicates:
+            - Path=/coupons/**, 
         - id: frontend
           uri: http://frontend:8080
           predicates:

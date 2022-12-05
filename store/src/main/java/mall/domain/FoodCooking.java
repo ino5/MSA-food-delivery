@@ -1,6 +1,7 @@
 package mall.domain;
 
 import mall.domain.CookFinished;
+import mall.domain.OrderUpdated;
 import mall.StoreApplication;
 import javax.persistence.*;
 import java.util.List;
@@ -54,6 +55,12 @@ public class FoodCooking  {
     
     
     private String storeId;
+    
+    
+    
+    
+    
+    private String isCanceled;
 
     @PostPersist
     public void onPostPersist(){
@@ -62,6 +69,14 @@ public class FoodCooking  {
         CookFinished cookFinished = new CookFinished(this);
         cookFinished.publishAfterCommit();
 
+
+
+        OrderUpdated orderUpdated = new OrderUpdated(this);
+        orderUpdated.publishAfterCommit();
+
+    }
+    @PreUpdate
+    public void onPreUpdate(){
     }
 
     public static FoodCookingRepository repository(){
@@ -117,6 +132,27 @@ public class FoodCooking  {
         /** Example 2:  finding and process
         
         repository().findById(paid.get???()).ifPresent(foodCooking->{
+            
+            foodCooking // do something
+            repository().save(foodCooking);
+
+
+         });
+        */
+
+        
+    }
+    public static void updateStatus(OrderCanceled orderCanceled){
+
+        /** Example 1:  new item 
+        FoodCooking foodCooking = new FoodCooking();
+        repository().save(foodCooking);
+
+        */
+
+        /** Example 2:  finding and process
+        
+        repository().findById(orderCanceled.get???()).ifPresent(foodCooking->{
             
             foodCooking // do something
             repository().save(foodCooking);

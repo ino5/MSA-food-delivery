@@ -68,6 +68,11 @@
                 [
                     { text: "id", value: "id" },
                     { text: "productId", value: "productId" },
+                    { text: "options", value: "options" },
+                    { text: "addres", value: "addres" },
+                    { text: "customerId", value: "customerId" },
+                    { text: "storeId", value: "storeId" },
+                    { text: "couponId", value: "couponId" },
                 ],
             order : [],
             newValue: {},
@@ -86,6 +91,11 @@
 
             this.newValue = {
                 'productId': '',
+                'options': [],
+                'addres': '',
+                'customerId': '',
+                'storeId': '',
+                'couponId': '',
             }
         },
         methods: {

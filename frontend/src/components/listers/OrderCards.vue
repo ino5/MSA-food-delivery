@@ -69,6 +69,11 @@
             
             me.newValue = {
                 'productId': '',
+                'options': [],
+                'addres': '',
+                'customerId': '',
+                'storeId': '',
+                'couponId': '',
             }
         },
         methods:{

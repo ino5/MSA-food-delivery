@@ -2,6 +2,7 @@ package mall.domain;
 
 import mall.domain.OrderPlaced;
 import mall.domain.OrderCanceled;
+import mall.domain.OrderUpdated;
 import mall.OrderingApplication;
 import javax.persistence.*;
 import java.util.List;
@@ -55,6 +56,12 @@ public class Order  {
     
     
     private String storeId;
+    
+    
+    
+    
+    
+    private String couponId;
 
     @PostPersist
     public void onPostPersist(){
@@ -68,6 +75,14 @@ public class Order  {
         OrderCanceled orderCanceled = new OrderCanceled(this);
         orderCanceled.publishAfterCommit();
 
+
+
+        OrderUpdated orderUpdated = new OrderUpdated(this);
+        orderUpdated.publishAfterCommit();
+
+    }
+    @PreUpdate
+    public void onPreUpdate(){
     }
     @PreRemove
     public void onPreRemove(){

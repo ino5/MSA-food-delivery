@@ -18,6 +18,11 @@
 
         <v-card-text>
             <String label="ProductId" v-model="value.productId" :editMode="editMode"/>
+            <String label="Options" v-model="value.options" :editMode="editMode"/>
+            <String label="Addres" v-model="value.addres" :editMode="editMode"/>
+            <String label="CustomerId" v-model="value.customerId" :editMode="editMode"/>
+            <String label="StoreId" v-model="value.storeId" :editMode="editMode"/>
+            <String label="CouponId" v-model="value.couponId" :editMode="editMode"/>
         </v-card-text>
 
         <v-card-actions>
@@ -37,6 +42,9 @@
                     v-else
             >
                 Order
+                Cancel
+                UpdateOrder
+                UpdateCoupon
             </v-btn>
             <v-btn
                     color="deep-purple lighten-2"

@@ -73,6 +73,7 @@
                 'orderId': '',
                 'options': '',
                 'storeId': '',
+                'isCanceled': '',
             }
         },
         methods:{
