@@ -11,6 +11,9 @@ import lombok.*;
 public class Picked extends AbstractEvent {
 
     private Long id;
+    private String status;
+    private String orderId;
+    private String address;
 
     public Picked(Delivery aggregate){
         super(aggregate);

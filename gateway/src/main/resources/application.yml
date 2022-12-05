@@ -8,19 +8,19 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: customer
+        - id: ordering
           uri: http://localhost:8081
           predicates:
-            - Path=/orders/**, 
-        - id: delivery
+            - Path=/orders/**, /payments/**, 
+        - id: store
           uri: http://localhost:8082
           predicates:
-            - Path=/tests/**, 
-        - id: BoundedContext1174
+            - Path=/foodCookings/**, 
+        - id: rider
           uri: http://localhost:8083
           predicates:
-            - Path=/test3s/**, 
-        - id: 고객센터
+            - Path=/deliveries/**, 
+        - id: customer
           uri: http://localhost:8084
           predicates:
             - Path=, /mypages/**
@@ -47,20 +47,20 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: ordering
+          uri: http://ordering:8080
+          predicates:
+            - Path=/orders/**, /payments/**, 
+        - id: store
+          uri: http://store:8080
+          predicates:
+            - Path=/foodCookings/**, 
+        - id: rider
+          uri: http://rider:8080
+          predicates:
+            - Path=/deliveries/**, 
         - id: customer
           uri: http://customer:8080
-          predicates:
-            - Path=/orders/**, 
-        - id: delivery
-          uri: http://delivery:8080
-          predicates:
-            - Path=/tests/**, 
-        - id: BoundedContext1174
-          uri: http://boundedContext1174:8080
-          predicates:
-            - Path=/test3s/**, 
-        - id: 고객센터
-          uri: http://고객센터:8080
           predicates:
             - Path=, /mypages/**
         - id: frontend

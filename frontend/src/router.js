@@ -7,12 +7,14 @@ Vue.use(Router);
 
 import OrderManager from "./components/listers/OrderCards"
 import OrderDetail from "./components/listers/OrderDetail"
+import PaymentManager from "./components/listers/PaymentCards"
+import PaymentDetail from "./components/listers/PaymentDetail"
 
-import TestManager from "./components/listers/TestCards"
-import TestDetail from "./components/listers/TestDetail"
+import FoodCookingManager from "./components/listers/FoodCookingCards"
+import FoodCookingDetail from "./components/listers/FoodCookingDetail"
 
-import Test3Manager from "./components/listers/Test3Cards"
-import Test3Detail from "./components/listers/Test3Detail"
+import DeliveryManager from "./components/listers/DeliveryCards"
+import DeliveryDetail from "./components/listers/DeliveryDetail"
 
 
 import MypageView from "./components/MypageView"
@@ -32,27 +34,37 @@ export default new Router({
                 name: 'OrderDetail',
                 component: OrderDetail
             },
+            {
+                path: '/payments',
+                name: 'PaymentManager',
+                component: PaymentManager
+            },
+            {
+                path: '/payments/:id',
+                name: 'PaymentDetail',
+                component: PaymentDetail
+            },
 
             {
-                path: '/tests',
-                name: 'TestManager',
-                component: TestManager
+                path: '/foodCookings',
+                name: 'FoodCookingManager',
+                component: FoodCookingManager
             },
             {
-                path: '/tests/:id',
-                name: 'TestDetail',
-                component: TestDetail
+                path: '/foodCookings/:id',
+                name: 'FoodCookingDetail',
+                component: FoodCookingDetail
             },
 
             {
-                path: '/test3s',
-                name: 'Test3Manager',
-                component: Test3Manager
+                path: '/deliveries',
+                name: 'DeliveryManager',
+                component: DeliveryManager
             },
             {
-                path: '/test3s/:id',
-                name: 'Test3Detail',
-                component: Test3Detail
+                path: '/deliveries/:id',
+                name: 'DeliveryDetail',
+                component: DeliveryDetail
             },
 
 

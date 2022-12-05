@@ -3,6 +3,126 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: ordering
+  labels:
+    app: ordering
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ordering
+  template:
+    metadata:
+      labels:
+        app: ordering
+    spec:
+      containers:
+        - name: ordering
+          image: username/ordering:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store
+  labels:
+    app: store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: store
+  template:
+    metadata:
+      labels:
+        app: store
+    spec:
+      containers:
+        - name: store
+          image: username/store:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rider
+  labels:
+    app: rider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rider
+  template:
+    metadata:
+      labels:
+        app: rider
+    spec:
+      containers:
+        - name: rider
+          image: username/rider:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: customer
   labels:
     app: customer
@@ -38,125 +158,56 @@ spec:
             periodSeconds: 5
             failureThreshold: 5
 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: delivery
-  labels:
-    app: delivery
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: delivery
-  template:
-    metadata:
-      labels:
-        app: delivery
-    spec:
-      containers:
-        - name: delivery
-          image: username/delivery:latest
-          ports:
-            - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 10
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 10
-          livenessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 120
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 5
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+
+apiVersion: v1
+kind: Service
 metadata:
-  name: BoundedContext1174
+  name: ordering
   labels:
-    app: BoundedContext1174
+    app: ordering
 spec:
-  replicas: 1
+  ports:
+    - port: 8080
+      targetPort: 8080
   selector:
-    matchLabels:
-      app: BoundedContext1174
-  template:
-    metadata:
-      labels:
-        app: BoundedContext1174
-    spec:
-      containers:
-        - name: BoundedContext1174
-          image: username/BoundedContext1174:latest
-          ports:
-            - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 10
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 10
-          livenessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 120
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 5
+    app: ordering
+
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+
+apiVersion: v1
+kind: Service
 metadata:
-  name: 고객센터
+  name: store
   labels:
-    app: 고객센터
+    app: store
 spec:
-  replicas: 1
+  ports:
+    - port: 8080
+      targetPort: 8080
   selector:
-    matchLabels:
-      app: 고객센터
-  template:
-    metadata:
-      labels:
-        app: 고객센터
-    spec:
-      containers:
-        - name: 고객센터
-          image: username/고객센터:latest
-          ports:
-            - containerPort: 8080
-          readinessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 10
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 10
-          livenessProbe:
-            httpGet:
-              path: '/actuator/health'
-              port: 8080
-            initialDelaySeconds: 120
-            timeoutSeconds: 2
-            periodSeconds: 5
-            failureThreshold: 5
+    app: store
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rider
+  labels:
+    app: rider
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: rider
 
 
 ---
@@ -174,55 +225,4 @@ spec:
       targetPort: 8080
   selector:
     app: customer
-
-
----
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: delivery
-  labels:
-    app: delivery
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: delivery
-
-
----
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: BoundedContext1174
-  labels:
-    app: BoundedContext1174
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: BoundedContext1174
-
-
----
-
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: 고객센터
-  labels:
-    app: 고객센터
-spec:
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: 고객센터
 
