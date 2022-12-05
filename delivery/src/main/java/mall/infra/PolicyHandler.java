@@ -17,22 +17,22 @@ import mall.domain.*;
 @Service
 @Transactional
 public class PolicyHandler{
-    @Autowired Test3Repository test3Repository;
+    @Autowired TestRepository testRepository;
     
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString){}
 
     @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='OrderPlaced'")
-    public void wheneverOrderPlaced_Test2(@Payload OrderPlaced orderPlaced){
+    public void wheneverOrderPlaced_StartDelivery(@Payload OrderPlaced orderPlaced){
 
         OrderPlaced event = orderPlaced;
-        System.out.println("\n\n##### listener Test2 : " + orderPlaced + "\n\n");
+        System.out.println("\n\n##### listener StartDelivery : " + orderPlaced + "\n\n");
 
 
         
 
         // Sample Logic //
-        Test3.test2(event);
+        Test.startDelivery(event);
         
 
         

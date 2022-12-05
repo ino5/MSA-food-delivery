@@ -3,22 +3,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 주문
+  name: customer
   labels:
-    app: 주문
+    app: customer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 주문
+      app: customer
   template:
     metadata:
       labels:
-        app: 주문
+        app: customer
     spec:
       containers:
-        - name: 주문
-          image: username/주문:latest
+        - name: customer
+          image: username/customer:latest
           ports:
             - containerPort: 8080
           readinessProbe:
@@ -43,22 +43,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 배송
+  name: delivery
   labels:
-    app: 배송
+    app: delivery
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 배송
+      app: delivery
   template:
     metadata:
       labels:
-        app: 배송
+        app: delivery
     spec:
       containers:
-        - name: 배송
-          image: username/배송:latest
+        - name: delivery
+          image: username/delivery:latest
           ports:
             - containerPort: 8080
           readinessProbe:
@@ -165,15 +165,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: 주문
+  name: customer
   labels:
-    app: 주문
+    app: customer
 spec:
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: 주문
+    app: customer
 
 
 ---
@@ -182,15 +182,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: 배송
+  name: delivery
   labels:
-    app: 배송
+    app: delivery
 spec:
   ports:
     - port: 8080
       targetPort: 8080
   selector:
-    app: 배송
+    app: delivery
 
 
 ---
