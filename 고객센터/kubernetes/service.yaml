@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: 고객센터
+  labels:
+    app: 고객센터
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: 고객센터

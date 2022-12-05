@@ -1,0 +1,82 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: 주문
+          uri: http://localhost:8081
+          predicates:
+            - Path=/orders/**, 
+        - id: 배송
+          uri: http://localhost:8082
+          predicates:
+            - Path=, 
+        - id: BoundedContext1174
+          uri: http://localhost:8083
+          predicates:
+            - Path=, 
+        - id: 고객센터
+          uri: http://localhost:8084
+          predicates:
+            - Path=, /mypages/**
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: 주문
+          uri: http://주문:8080
+          predicates:
+            - Path=/orders/**, 
+        - id: 배송
+          uri: http://배송:8080
+          predicates:
+            - Path=, 
+        - id: BoundedContext1174
+          uri: http://boundedContext1174:8080
+          predicates:
+            - Path=, 
+        - id: 고객센터
+          uri: http://고객센터:8080
+          predicates:
+            - Path=, /mypages/**
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
