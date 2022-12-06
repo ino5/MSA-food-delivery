@@ -94,7 +94,7 @@
 
 결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
 
-ordering 프로젝트: Payment.java
+ordering 서비스 프로젝트: Payment.java
 
 ```java
     /**
@@ -111,7 +111,7 @@ ordering 프로젝트: Payment.java
 
 ### Subscribe
 
-store 프로젝트: PolicyHandler.java
+store 서비스 프로젝트: PolicyHandler.java
 
 ```java
     /**
@@ -130,6 +130,123 @@ store 프로젝트: PolicyHandler.java
 
 
 ## 🎈 체크포인트2 CQRS
+
+![image](https://user-images.githubusercontent.com/70236767/205803959-2ec262fc-cfe7-40b2-9235-2bd5f4fbc958.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804108-3a583d28-2411-458a-a05a-93608e4daf38.png)
+
+
+![image](https://user-images.githubusercontent.com/70236767/205804057-faa0e31b-fe40-41a5-b0e9-8419e432d272.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804142-c40b2aa8-f5c0-422c-9bee-44a0c9c2f301.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804302-6ba3641f-9cf9-414c-aed9-50313efec5cb.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804329-9488a15e-7da1-4f82-8808-dabf9eabde62.png)
+
+
+```java
+@Service
+public class MypageViewHandler {
+
+    @Autowired
+    private MypageRepository mypageRepository;
+
+
+    /**
+        주문이 들어왔을 때
+     */
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenOrderPlaced_then_CREATE_1 (@Payload OrderPlaced orderPlaced) {
+        try {
+
+            if (!orderPlaced.validate()) return;
+
+            // view 객체 생성
+            Mypage mypage = new Mypage();
+            // view 객체에 이벤트의 Value 를 set 함
+            mypage.setStatus("ordered");
+            // view 레파지 토리에 save
+            mypageRepository.save(mypage);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+        결제가 되었을 때
+     */
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenPaid_then_UPDATE_1(@Payload Paid paid) {
+        try {
+            if (!paid.validate()) return;
+                // view 객체 조회
+            Optional<Mypage> mypageOptional = mypageRepository.findById(Long.valueOf(paid.getOrderId()));
+
+            if( mypageOptional.isPresent()) {
+                 Mypage mypage = mypageOptional.get();
+            // view 객체에 이벤트의 eventDirectValue 를 set 함
+                mypage.setStatus("paid");    
+                // view 레파지 토리에 save
+                 mypageRepository.save(mypage);
+                }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+        주문이 받아들여졌을 때
+     */
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenOrderAccepted_then_UPDATE_2(@Payload OrderAccepted orderAccepted) {
+        try {
+            if (!orderAccepted.validate()) return;
+                // view 객체 조회
+            Optional<Mypage> mypageOptional = mypageRepository.findById(Long.valueOf(orderAccepted.getOrderId()));
+
+            if( mypageOptional.isPresent()) {
+                 Mypage mypage = mypageOptional.get();
+            // view 객체에 이벤트의 eventDirectValue 를 set 함
+                // view 레파지 토리에 save
+                 mypageRepository.save(mypage);
+                }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+        주문이 거절되었을 때
+     */
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenOrderRejected_then_UPDATE_3(@Payload OrderRejected orderRejected) {
+        try {
+            if (!orderRejected.validate()) return;
+                // view 객체 조회
+
+                List<Mypage> mypageList = mypageRepository.findByStatus(orderRejected.getOrderId());
+                for(Mypage mypage : mypageList){
+                    // view 객체에 이벤트의 eventDirectValue 를 set 함
+                    mypage.setStatus("rejected");
+                // view 레파지 토리에 save
+                mypageRepository.save(mypage);
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
 
 ## 🎈 체크포인트3 Compensation / Correlation
 
