@@ -97,7 +97,15 @@ public class Order  {
         return orderRepository;
     }
 
-
+    /**
+        주문에 쿠폰 적용하기
+        @param updateCouponCommand
+     */
+    public void updateCoupon(UpdateCouponCommand updateCouponCommand) {
+        String couponId = updateCouponCommand.getCouponId();
+        this.setCouponId(couponId);
+        repository().save(this);
+    }
 
 
 
