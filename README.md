@@ -1,5 +1,3 @@
-![image](https://user-images.githubusercontent.com/487999/79708354-29074a80-82fa-11ea-80df-0db3962fb453.png)
-
 # 배달의 민족 : 마이크로서비스 분석/설계 및 구현 실습
 
 참고 템플릿: https://github.com/msa-ez/example-food-delivery
@@ -7,8 +5,6 @@
 
 
 # 서비스 시나리오
-
-배달의 민족 커버하기 - https://1sung.tistory.com/106
 
 기능적 요구사항
 1. 고객이 메뉴를 선택하여 주문한다
@@ -35,23 +31,23 @@
     1. 배달상태가 바뀔때마다 카톡 등으로 알림을 줄 수 있어야 한다  Event driven
 
 
-# 체크포인트
+# 🎈 체크포인트
 
-🎈 [분석/설계: 이벤트 스토밍](#-분석설계-이벤트-스토밍)
+[분석/설계: 이벤트 스토밍](#-분석설계-이벤트-스토밍)
 
-🎈 새롭게 추가한 기능 2가지
+[새롭게 추가한 기능 2가지](#-새롭게-추가한-기능-2가지)
 
-🎈 1. Saga (Pub / Sub)
+[체크포인트1. Saga (Pub / Sub)](#-체크포인트1-saga-pub--sub)
 
-🎈 [2. CQRS](#-체크포인트2-cqrs)
+[체크포인트2. CQRS](#-체크포인트2-cqrs)
 
-🎈 3. Compensation / Correlation
+[체크포인트3. Compensation / Correlation](#-체크포인트3-compensation--correlation)
 
-🎈 4. Request / Response
+[체크포인트4. Request / Response](#-체크포인트4-request--response)
 
-🎈 5. Circuit Breaker
+[체크포인트5. Circuit Breaker](#-체크포인트5-circuit-breaker)
 
-🎈 6. Gateway / Ingress
+[체크포인트6. Gateway / Ingress](#-체크포인트6-gateway--ingress)
 
 
 
