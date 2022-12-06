@@ -83,8 +83,8 @@
 ![image](https://user-images.githubusercontent.com/70236767/205816113-c77f2797-1ee7-4480-ac8c-d6bf1b1fb10d.png)
 
 
-1. 고객이 use 커맨드를 호출한다. 
-2. CouponUsed 이벤트가 발생한다. 
+1. 고객이 쿠폰을 사용하기 위해 coupon 서비스의 use 커맨드를 호출한다. 
+2. CouponUsed 이벤트가 발생한다.
 3. Req/Res 방식으로 ordering 서비스의 updateCoupon 커맨드를 호출한다.
 4. OrderUpdated 이벤트가 발생되면서 주문에 쿠폰이 적용된다.
 
@@ -94,7 +94,10 @@
 
 ![image](https://user-images.githubusercontent.com/70236767/205794609-190d16b0-814f-4339-afb5-048c0fcbf19f.png)
 
-고객이 updateCoupon 커맨드를 호출하여 주문 옵션을 수정하면 OrderUpdated 이벤트가 발생하면서 publish한다. 이 때 updateOrder 정책에 의해 orderUpdated 이벤트가 발생되면서 주문 옵션이 수정된다.
+1. 고객이 주문 옵션을 수정하기 위해 ordering 서비스의 updateCoupon 커맨드를 호출한다. 
+2. OrderUpdated 이벤트가 발생하면서 publish한다. 
+3. store 서비스의 updateOrder 정책이 호출된다.
+4. store 서비스의 orderUpdated 이벤트가 발생되면서 주문 옵션이 수정된다.
 
 
 
