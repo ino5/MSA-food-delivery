@@ -142,6 +142,15 @@
 
 OrderPlaced 이벤트 발생 이후 메시지가 publish된 것을 확인할 수 있다.
 
+```java
+// publish 코드
+    @PostPersist
+    public void onPostPersist(){
+        OrderPlaced orderPlaced = new OrderPlaced(this);
+        orderPlaced.publishAfterCommit();
+    ...
+```
+
 #### 주문 요청했을 때 store 서비스 콘솔
 
 ![image](https://user-images.githubusercontent.com/70236767/205839364-86f8a7ab-2bbb-4f16-8834-963ebf4262bd.png)
@@ -149,6 +158,19 @@ OrderPlaced 이벤트 발생 이후 메시지가 publish된 것을 확인할 수
 ![image](https://user-images.githubusercontent.com/70236767/205839530-746275a2-571f-4e75-a02a-1d923d625169.png)
 
 publish된 OrderPlaced 메시지를 subscribe해서 copyOrderInfo policy가 호출된 것을 확인할 수 있다.
+
+```java
+// subscribe 코드
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='OrderPlaced'")
+    public void wheneverOrderPlaced_CopyOrderInfo(@Payload OrderPlaced orderPlaced){
+
+        OrderPlaced event = orderPlaced;
+        System.out.println("\n\n##### listener CopyOrderInfo : " + orderPlaced + "\n\n");
+
+        // Sample Logic //
+        FoodCooking.copyOrderInfo(event);
+    }
+```
 
 
 ### 2. 결제 관련 Pub / Sub 코드 구현
