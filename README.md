@@ -124,12 +124,13 @@
 
 ### 1. 주문했을 때 Pub / Sub 확인해보기
 
-
+![image](https://user-images.githubusercontent.com/70236767/205840137-4bfe31f3-53c6-4d66-af43-262b8e1c1dfd.png)
 
 
 #### 주문 요청하기
 
-![image](https://user-images.githubusercontent.com/70236767/205838916-946deff7-58b7-4015-9fad-91fef2cab60b.png)
+![image](https://user-images.githubusercontent.com/70236767/205842117-0015939a-97e9-47f9-b49b-3544dc9061d9.png)
+
 
 #### 주문 요청했을 때 ordering 서비스 콘솔
 
@@ -137,7 +138,7 @@
 
 #### 카프카 콘솔
 
-![image](https://user-images.githubusercontent.com/70236767/205840137-4bfe31f3-53c6-4d66-af43-262b8e1c1dfd.png)
+![image](https://user-images.githubusercontent.com/70236767/205838916-946deff7-58b7-4015-9fad-91fef2cab60b.png)
 
 OrderPlaced 이벤트 발생 이후 메시지가 publish된 것을 확인할 수 있다.
 
