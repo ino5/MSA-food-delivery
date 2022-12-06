@@ -101,7 +101,7 @@
 
 ### 2. 주문 옵션 수정
 
-![image](https://user-images.githubusercontent.com/70236767/205794609-190d16b0-814f-4339-afb5-048c0fcbf19f.png)
+![image](https://user-images.githubusercontent.com/70236767/205818403-70810e53-e707-4828-80e3-1491e47d46bf.png)
 
 1. 고객이 주문 옵션을 수정하기 위해 ordering 서비스의 updateCoupon 커맨드를 호출한다. 
 2. OrderUpdated 이벤트가 발생하면서 publish한다. 
