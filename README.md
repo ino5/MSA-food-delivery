@@ -480,6 +480,20 @@ execution.isolation.thread.timeoutInMilliseconds: 3000
 
 요청처리 쓰레드에서 처리시간이 3000 밀리가 넘어서기 시작하여 어느정도 유지되면 Circuit Breaker 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
 
+HystrixCommand 어노테이션을 이용하여 메소드에 적용할 수 있다. Circuit Breaker 발생 시 fallback으로 doFallback 메소드를 호출하도록 하였다.
+```java
+@HystrixCommand(fallbackMethod = "doFallback")
+
+```
+
+doFallback 메소드는 아래와 같이 예외 처리를 하도록 구현하였다.
+
+```java
+public void doFallback() {
+    throw new RuntimeException("time out");
+}
+```
+
 
 
 <br><br>
