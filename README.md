@@ -338,6 +338,8 @@ spring:
 ## Model
 www.msaez.io/#/storming/fa783b1b90dfa0eb180753d693a78c47
 
+# 서버 실행 README
+
 ## Before Running Services
 ### Make sure there is a Kafka server running
 ```
