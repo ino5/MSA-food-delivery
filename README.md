@@ -131,7 +131,11 @@ store 서비스 프로젝트: PolicyHandler.java
 
 ## 🎈 체크포인트2 CQRS
 
+CQRS를 통해 주문 상태가 변경되는 이벤트가 발생할 때마다 view의 주문 상태를 변경하도록 한다.
+
+
 ![image](https://user-images.githubusercontent.com/70236767/205803959-2ec262fc-cfe7-40b2-9235-2bd5f4fbc958.png)
+
 
 ![image](https://user-images.githubusercontent.com/70236767/205804108-3a583d28-2411-458a-a05a-93608e4daf38.png)
 
