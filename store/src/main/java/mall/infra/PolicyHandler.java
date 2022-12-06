@@ -40,6 +40,7 @@ public class PolicyHandler{
     }
 
     /**
+        결제가 되었을 때 (Paid 이벤트) 상태를 변경한다.
      */
     @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='Paid'")
     public void wheneverPaid_UpdateStatus(@Payload Paid paid){
@@ -47,23 +48,22 @@ public class PolicyHandler{
         System.out.println("\n\n##### listener UpdateStatus : " + paid + "\n\n");
 
         // Sample Logic //
+        // FoodCooking의 상태변경하기 (결제 완료 상태)
         FoodCooking.updateStatus(event);
     }
+
+    /**
+        주문 취소에 대해
+     */
     @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='OrderCanceled'")
     public void wheneverOrderCanceled_UpdateStatus(@Payload OrderCanceled orderCanceled){
 
         OrderCanceled event = orderCanceled;
         System.out.println("\n\n##### listener UpdateStatus : " + orderCanceled + "\n\n");
 
-
-        
-
         // Sample Logic //
+        // 상태를 "취소" 변경하기
         FoodCooking.updateStatus(event);
-        
-
-        
-
     }
 
     @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='OrderUpdated'")

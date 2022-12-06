@@ -7,6 +7,15 @@ spring:
 
 spring:
   profiles: default
+  feign:
+    hystrix:
+      enabled: true
+      
+  hystrix:
+    command:
+      # 전역설정
+      default:
+        execution.isolation.thread.timeoutInMilliseconds: 3000
   jpa:
     properties:
       hibernate:

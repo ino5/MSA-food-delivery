@@ -70,11 +70,8 @@ public class Order  {
         OrderPlaced orderPlaced = new OrderPlaced(this);
         orderPlaced.publishAfterCommit();
 
-
-
-        OrderCanceled orderCanceled = new OrderCanceled(this);
-        orderCanceled.publishAfterCommit();
-
+        // OrderCanceled orderCanceled = new OrderCanceled(this);
+        // orderCanceled.publishAfterCommit();
 
 
         OrderUpdated orderUpdated = new OrderUpdated(this);
@@ -84,8 +81,15 @@ public class Order  {
     @PreUpdate
     public void onPreUpdate(){
     }
+
+    /**
+        주문이 취소될 때 보상 처리
+     */
     @PreRemove
     public void onPreRemove(){
+        // 주문 취소 publish
+        OrderCanceled orderCanceled = new OrderCanceled(this);
+        orderCanceled.publishAfterCommit();
     }
 
     public static OrderRepository repository(){

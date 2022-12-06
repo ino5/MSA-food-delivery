@@ -121,7 +121,17 @@ public class FoodCooking  {
 
         
     }
+
+    /**
+     *  주문 상태를 "paid"(결제완료) 로 업데이트한다.
+     *  @param: paid
+     */
     public static void updateStatus(Paid paid){
+        repository().findById(paid.getOrderId()).ifPresent(foodCooking -> { // orderId로 찾는다.
+            String status = "paid"; // 상태: "paid" (결제완료)
+            foodCooking.setStatus(status); // 상태 변경
+            repository().save(foodCooking); // 수정
+        });
 
         /** Example 1:  new item 
         FoodCooking foodCooking = new FoodCooking();
@@ -138,10 +148,9 @@ public class FoodCooking  {
 
 
          });
-        */
-
-        
+        */ 
     }
+
     public static void updateStatus(OrderCanceled orderCanceled){
 
         /** Example 1:  new item 

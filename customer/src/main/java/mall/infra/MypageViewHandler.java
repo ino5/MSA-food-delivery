@@ -17,6 +17,10 @@ public class MypageViewHandler {
     @Autowired
     private MypageRepository mypageRepository;
 
+
+    /**
+        주문이 들어왔을 때
+     */
     @StreamListener(KafkaProcessor.INPUT)
     public void whenOrderPlaced_then_CREATE_1 (@Payload OrderPlaced orderPlaced) {
         try {
@@ -35,7 +39,9 @@ public class MypageViewHandler {
         }
     }
 
-
+    /**
+        결제가 되었을 때
+     */
     @StreamListener(KafkaProcessor.INPUT)
     public void whenPaid_then_UPDATE_1(@Payload Paid paid) {
         try {
@@ -56,6 +62,10 @@ public class MypageViewHandler {
             e.printStackTrace();
         }
     }
+
+    /**
+        주문이 받아들여졌을 때
+     */
     @StreamListener(KafkaProcessor.INPUT)
     public void whenOrderAccepted_then_UPDATE_2(@Payload OrderAccepted orderAccepted) {
         try {
@@ -66,6 +76,7 @@ public class MypageViewHandler {
             if( mypageOptional.isPresent()) {
                  Mypage mypage = mypageOptional.get();
             // view 객체에 이벤트의 eventDirectValue 를 set 함
+                 mypage.setStatus("updated");
                 // view 레파지 토리에 save
                  mypageRepository.save(mypage);
                 }
@@ -75,6 +86,10 @@ public class MypageViewHandler {
             e.printStackTrace();
         }
     }
+
+    /**
+        주문이 거절되었을 때
+     */
     @StreamListener(KafkaProcessor.INPUT)
     public void whenOrderRejected_then_UPDATE_3(@Payload OrderRejected orderRejected) {
         try {
@@ -93,7 +108,5 @@ public class MypageViewHandler {
             e.printStackTrace();
         }
     }
-
-
 }
 
