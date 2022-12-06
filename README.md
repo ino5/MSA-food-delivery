@@ -69,16 +69,24 @@
 
 ### 1. 쿠폰
 
-![image](https://user-images.githubusercontent.com/70236767/205791378-37b8e704-1cac-4f66-ba96-079deb98e552.png)
-
 #### 쿠폰생성
 
-배달이 완료되면 rider 서비스에서 Delivered 이벤트가 발생하면서 publish 한다. 이 때 coupon 서비스에서 createCoupon 정책에 의해 CouponCreated 이벤트가 발생되면서 쿠폰이 생성된다.
+![image](https://user-images.githubusercontent.com/70236767/205810740-77c0c851-30c2-4c57-a374-b502345e6cc8.png)
+
+1. 배달이 완료되면 rider 서비스에서 Delivered 이벤트가 발생하면서 publish 한다. 
+2. coupon 서비스에서 createCoupon 정책이 호출된다.
+3. CouponCreated 이벤트가 발생되면서 쿠폰이 생성된다.
 
 
 #### 쿠폰사용
 
-고객이 use 커맨드를 호출하여 쿠폰을 사용하면 CouponUsed 이벤트가 발생한다. 그리고 Req/Res 방식으로 ordering 서비스의 updateCoupon 커맨드를 호출하여 OrderUpdated 이벤트가 발생되면서 주문에 쿠폰이 적용된다.
+![image](https://user-images.githubusercontent.com/70236767/205816113-c77f2797-1ee7-4480-ac8c-d6bf1b1fb10d.png)
+
+
+1. 고객이 use 커맨드를 호출한다. 
+2. CouponUsed 이벤트가 발생한다. 
+3. Req/Res 방식으로 ordering 서비스의 updateCoupon 커맨드를 호출한다.
+4. OrderUpdated 이벤트가 발생되면서 주문에 쿠폰이 적용된다.
 
 
 
