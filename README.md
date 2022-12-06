@@ -290,7 +290,7 @@ spring:
             allowCredentials: true
 ```
 
-### 
+### 도커 설정
 
 ```yml
 spring:
