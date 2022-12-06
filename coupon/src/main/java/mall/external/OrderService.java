@@ -11,6 +11,9 @@ import java.util.Date;
 
 @FeignClient(name = "ordering", url = "${api.url.ordering}")
 public interface OrderService {
-    @RequestMapping(method= RequestMethod.PATCH, path="/orders")
+    /**
+        쿠폰을 사용할 때 주문에 반영하기 위해  ordering context에 호출
+     */
+    @RequestMapping(method= RequestMethod.PATCH, path="/orders/{id}/updatecoupon)
     public void updateCoupon(@RequestBody Order order);
 }

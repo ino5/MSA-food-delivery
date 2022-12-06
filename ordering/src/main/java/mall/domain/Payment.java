@@ -37,10 +37,13 @@ public class Payment  {
     
     private String status;
 
+
+    /**
+        결제가 이루어진 직후 호출 (PostPersist)
+     */
     @PostPersist
     public void onPostPersist(){
-
-
+        // Paid를 publish한다.
         Paid paid = new Paid(this);
         paid.publishAfterCommit();
 

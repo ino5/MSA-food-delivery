@@ -13,13 +13,16 @@ import javax.transaction.Transactional;
 
 
 @RestController
-// @RequestMapping(value="/coupons")
+@RequestMapping(value="/coupons")
 @Transactional
 public class CouponController {
     @Autowired
     CouponRepository couponRepository;
 
-
+    @RequestMapping(value = "/useCopon/{id}")
+    public String helloWorld() {
+        return "hello world";
+    }    
 
 
 }

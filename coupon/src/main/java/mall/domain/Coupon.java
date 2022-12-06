@@ -42,30 +42,36 @@ public class Coupon  {
     
     
     
-    private String isUsed;
+    private boolean isUsed;
 
     @PostPersist
     public void onPostPersist(){
+        // CouponCreated couponCreated = new CouponCreated(this);
+        // couponCreated.publishAfterCommit();
 
+        // 쿠폰을 사용한다면 
+        if (isUsed == true) {
 
-        CouponCreated couponCreated = new CouponCreated(this);
-        couponCreated.publishAfterCommit();
+            // ordering context에 동기 호출(req / res)
 
+            //Following code causes dependency to external APIs
+            // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.            
+            mall.external.Order order = new mall.external.Order().;
+            
+            // 동기 호출 할 때 coupon의 id와 order의 id 담아 보내기
+            order.setCouponId(this.getId()); // coupon id
+            order.setOrderId(this.getOrderId()); // order id
+            
+            // mappings goes here
+            CouponApplication.applicationContext.getBean(mall.external.OrderService.class)
+                .updateCoupon(order);
 
-        //Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
-
-
-        mall.external.Order order = new mall.external.Order();
-        // mappings goes here
-        CouponApplication.applicationContext.getBean(mall.external.OrderService.class)
-            .updateCoupon(order);
-
-
-        CouponUsed couponUsed = new CouponUsed(this);
-        couponUsed.publishAfterCommit();
-
+            // couponUsed publish
+            CouponUsed couponUsed = new CouponUsed(this);
+            couponUsed.publishAfterCommit();
+        }
     }
+
     @PreUpdate
     public void onPreUpdate(){
     }

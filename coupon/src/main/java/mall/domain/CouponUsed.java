@@ -21,4 +21,5 @@ public class CouponUsed extends AbstractEvent {
     public CouponUsed(){
         super();
     }
+
 }
