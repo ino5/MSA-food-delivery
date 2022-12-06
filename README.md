@@ -179,9 +179,20 @@ store 서비스: FoodCooking.java의 updateStatus(Paid paid) 구현
 
 ### 실제 주문했을 때 kafka 메시지 확인해보기
 
-![image](https://user-images.githubusercontent.com/70236767/205837622-f4872e4b-3867-48f4-a3d6-9e824db5b757.png)
+#### 주문 요청하기
 
-![image](https://user-images.githubusercontent.com/70236767/205837577-c3433d98-12aa-4685-a955-260fa85e2e4f.png)
+![image](https://user-images.githubusercontent.com/70236767/205838916-946deff7-58b7-4015-9fad-91fef2cab60b.png)
+
+#### 주문 요청했을 때 ordering 서비스 콘솔
+
+![image](https://user-images.githubusercontent.com/70236767/205839076-c4b8043e-5eda-41a9-8901-face14417190.png)
+
+#### 주문 요청했을 때 store 서비스 콘솔
+
+![image](https://user-images.githubusercontent.com/70236767/205839364-86f8a7ab-2bbb-4f16-8834-963ebf4262bd.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205839530-746275a2-571f-4e75-a02a-1d923d625169.png)
+
 
 <br><br>
 
