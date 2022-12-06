@@ -124,7 +124,7 @@
 
 ### 1. 주문했을 때 Pub / Sub 확인해보기
 
-![image](https://user-images.githubusercontent.com/70236767/205840137-4bfe31f3-53c6-4d66-af43-262b8e1c1dfd.png)
+
 
 
 #### 주문 요청하기
@@ -135,33 +135,19 @@
 
 ![image](https://user-images.githubusercontent.com/70236767/205839076-c4b8043e-5eda-41a9-8901-face14417190.png)
 
+#### 카프카 콘솔
+
+![image](https://user-images.githubusercontent.com/70236767/205840137-4bfe31f3-53c6-4d66-af43-262b8e1c1dfd.png)
+
+OrderPlaced 이벤트 발생 이후 메시지가 publish된 것을 확인할 수 있다.
+
 #### 주문 요청했을 때 store 서비스 콘솔
 
 ![image](https://user-images.githubusercontent.com/70236767/205839364-86f8a7ab-2bbb-4f16-8834-963ebf4262bd.png)
 
 ![image](https://user-images.githubusercontent.com/70236767/205839530-746275a2-571f-4e75-a02a-1d923d625169.png)
 
-
-<br><br>
-
-## 🎈 체크포인트2 CQRS
-
-CQRS를 통해 주문 상태가 변경되는 이벤트가 발생할 때마다 view의 주문 상태를 변경하도록 한다.
-
-
-![image](https://user-images.githubusercontent.com/70236767/205803959-2ec262fc-cfe7-40b2-9235-2bd5f4fbc958.png)
-
-
-![image](https://user-images.githubusercontent.com/70236767/205804108-3a583d28-2411-458a-a05a-93608e4daf38.png)
-
-
-![image](https://user-images.githubusercontent.com/70236767/205804057-faa0e31b-fe40-41a5-b0e9-8419e432d272.png)
-
-![image](https://user-images.githubusercontent.com/70236767/205804142-c40b2aa8-f5c0-422c-9bee-44a0c9c2f301.png)
-
-![image](https://user-images.githubusercontent.com/70236767/205804302-6ba3641f-9cf9-414c-aed9-50313efec5cb.png)
-
-![image](https://user-images.githubusercontent.com/70236767/205804329-9488a15e-7da1-4f82-8808-dabf9eabde62.png)
+publish된 OrderPlaced 메시지를 subscribe해서 copyOrderInfo policy가 호출된 것을 확인할 수 있다.
 
 
 ### 2. 결제 관련 Pub / Sub 코드 구현
@@ -221,6 +207,27 @@ store 서비스: FoodCooking.java의 updateStatus(Paid paid) 구현
     }
 ```
 
+
+<br><br>
+
+## 🎈 체크포인트2 CQRS
+
+CQRS를 통해 주문 상태가 변경되는 이벤트가 발생할 때마다 view의 주문 상태를 변경하도록 한다.
+
+
+![image](https://user-images.githubusercontent.com/70236767/205803959-2ec262fc-cfe7-40b2-9235-2bd5f4fbc958.png)
+
+
+![image](https://user-images.githubusercontent.com/70236767/205804108-3a583d28-2411-458a-a05a-93608e4daf38.png)
+
+
+![image](https://user-images.githubusercontent.com/70236767/205804057-faa0e31b-fe40-41a5-b0e9-8419e432d272.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804142-c40b2aa8-f5c0-422c-9bee-44a0c9c2f301.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804302-6ba3641f-9cf9-414c-aed9-50313efec5cb.png)
+
+![image](https://user-images.githubusercontent.com/70236767/205804329-9488a15e-7da1-4f82-8808-dabf9eabde62.png)
 
 
 ```java
