@@ -588,6 +588,11 @@ www.msaez.io/#/storming/fa783b1b90dfa0eb180753d693a78c47
 
 # 서버 실행 README
 
+## 참고사항
+
+해당 프로젝트의 카프카 토픽은 mall이다.
+- ex) ./kafka-console-consumer --bootstrap-server localhost:9092 --topic mall
+
 ## Before Running Services
 ### Make sure there is a Kafka server running
 ```
