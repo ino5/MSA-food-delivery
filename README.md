@@ -250,7 +250,7 @@ public class MypageViewHandler {
 ```
 
 
-
+<br><br>
 
 ## 🎈 체크포인트3 Compensation / Correlation
 
@@ -275,6 +275,8 @@ public class MypageViewHandler {
         orderCanceled.publishAfterCommit();
     }
 ```
+
+<br><br>
 
 ## 🎈 체크포인트4 Request / Response
 
@@ -371,6 +373,8 @@ OrderController
     }
 ```
 
+<br><br>
+
 ## 🎈 체크포인트5 Circuit Breaker
 
 Spring FeignClient + Hystrix를 이용하여 구현한다.
@@ -402,6 +406,8 @@ execution.isolation.thread.timeoutInMilliseconds: 610
 요청처리 쓰레드에서 처리시간이 610 밀리가 넘어서기 시작하여 어느정도 유지되면 Circuit Breaker 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
 
 
+
+<br><br>
 
 ## 🎈 체크포인트6 Gateway / Ingress
 
@@ -495,9 +501,15 @@ spring:
             allowCredentials: true
 ```
 
+<br><br>
 
 ## Model
 www.msaez.io/#/storming/fa783b1b90dfa0eb180753d693a78c47
+
+
+<br><br>
+
+<br><br>
 
 # 서버 실행 README
 
