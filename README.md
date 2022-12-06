@@ -270,6 +270,8 @@ public class MypageViewHandler {
 서로 다른 마이크로서비스 간 데이터 일관성 처리를 위해 사용하는 correlation key에 대해 주문의 아이디인 orderId를 사용한다.
 
 
+order 서비스의 Order.java
+
 ```java
     /**
         주문이 취소될 때 보상 처리
@@ -279,6 +281,25 @@ public class MypageViewHandler {
         // 주문 취소 publish
         OrderCanceled orderCanceled = new OrderCanceled(this);
         orderCanceled.publishAfterCommit();
+    }
+```
+
+
+store 서비스의 PolicyHandler.java
+
+```java
+    /**
+        주문 취소에 대해
+     */
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='OrderCanceled'")
+    public void wheneverOrderCanceled_UpdateStatus(@Payload OrderCanceled orderCanceled){
+
+        OrderCanceled event = orderCanceled;
+        System.out.println("\n\n##### listener UpdateStatus : " + orderCanceled + "\n\n");
+
+        // Sample Logic //
+        // 상태를 "취소" 변경하기
+        FoodCooking.updateStatus(event);
     }
 ```
 
