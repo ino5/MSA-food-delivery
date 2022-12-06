@@ -63,6 +63,8 @@
 
 ## 🎈 새롭게 추가한 기능 2가지
 
+새롭게 추가한 기능으로 쿠폰 기능(쿠폰생성/쿠폰사용)과 주문 옵션 수정 기능이 있다.
+
 ### 1. 쿠폰
 
 ![image](https://user-images.githubusercontent.com/70236767/205791378-37b8e704-1cac-4f66-ba96-079deb98e552.png)
@@ -92,7 +94,7 @@
 
 결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
 
-Payment.java
+ordering 프로젝트: Payment.java
 
 ```java
     /**
@@ -108,6 +110,8 @@ Payment.java
 ```
 
 ### Subscribe
+
+store 프로젝트: PolicyHandler.java
 
 ```java
     /**
