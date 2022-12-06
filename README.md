@@ -126,7 +126,7 @@
 
 결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
 
-ordering 서비스 프로젝트: Payment.java
+ordering 서비스: Payment.java
 
 ```java
     /**
@@ -143,7 +143,7 @@ ordering 서비스 프로젝트: Payment.java
 
 ### Subscribe
 
-store 서비스 프로젝트: PolicyHandler.java
+store 서비스: PolicyHandler.java
 
 ```java
     /**
@@ -157,6 +157,23 @@ store 서비스 프로젝트: PolicyHandler.java
         // Sample Logic //
         // FoodCooking의 상태변경하기 (결제 완료 상태)
         FoodCooking.updateStatus(event);
+    }
+```
+
+
+store 서비스: FoodCooking.java의 updateStatus(Paid paid) 구현
+
+```java
+    /**
+     *  주문 상태를 "paid"(결제완료) 로 업데이트한다.
+     *  @param: paid
+     */
+    public static void updateStatus(Paid paid){
+        repository().findById(paid.getOrderId()).ifPresent(foodCooking -> {
+            String status = "paid"; // 상태: "paid" (결제완료)
+            foodCooking.setStatus(status); // 상태 변경
+            repository().save(foodCooking); // 수정
+        });
     }
 ```
 
