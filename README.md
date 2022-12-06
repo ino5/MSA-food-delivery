@@ -254,6 +254,28 @@ public class MypageViewHandler {
 
 ## 🎈 체크포인트3 Compensation / Correlation
 
+![image](https://user-images.githubusercontent.com/70236767/205807967-d25ec7f4-ec46-4ba0-8fd9-314aa8bb8e78.png)
+
+
+주문이 취소될 때 Compensation이 발생한다. Order 클래스에서 @PreRemove 어노테이션이 적용된 onPreRemove 메소드에서 구현한다.
+
+주문취소 이벤트 OrderCanceled를 publish하면서 다른 서비스인 store에서 updateStatus 정책을 통해 상태를 변경할 수 있다.
+
+서로 다른 마이크로서비스 간 데이터 일관성 처리를 위해 사용하는 correlation key에 대해 주문의 아이디인 orderId를 사용한다.
+
+
+```java
+    /**
+        주문이 취소될 때 보상 처리
+     */
+    @PreRemove
+    public void onPreRemove(){
+        // 주문 취소 publish
+        OrderCanceled orderCanceled = new OrderCanceled(this);
+        orderCanceled.publishAfterCommit();
+    }
+```
+
 ## 🎈 체크포인트4 Request / Response
 
 ![image](https://user-images.githubusercontent.com/70236767/205790898-e4a3aafc-f671-4478-946f-539551faa785.png)
