@@ -122,62 +122,7 @@
 
 ## 🎈 체크포인트1 Saga (Pub / Sub)
 
-### Publish
-
-결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
-
-ordering 서비스: Payment.java
-
-```java
-    /**
-        결제가 이루어진 직후 호출 (PostPersist)
-     */
-    @PostPersist
-    public void onPostPersist(){
-        // Paid를 publish한다.
-        Paid paid = new Paid(this);
-        paid.publishAfterCommit();
-
-    }
-```
-
-### Subscribe
-
-store 서비스: PolicyHandler.java
-
-```java
-    /**
-        결제가 되었을 때 (Paid 이벤트) 상태를 변경한다.
-     */
-    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='Paid'")
-    public void wheneverPaid_UpdateStatus(@Payload Paid paid){
-        Paid event = paid;
-        System.out.println("\n\n##### listener UpdateStatus : " + paid + "\n\n");
-
-        // Sample Logic //
-        // FoodCooking의 상태변경하기 (결제 완료 상태)
-        FoodCooking.updateStatus(event);
-    }
-```
-
-
-store 서비스: FoodCooking.java의 updateStatus(Paid paid) 구현
-
-```java
-    /**
-     *  주문 상태를 "paid"(결제완료) 로 업데이트한다.
-     *  @param: paid
-     */
-    public static void updateStatus(Paid paid){
-        repository().findById(paid.getOrderId()).ifPresent(foodCooking -> {
-            String status = "paid"; // 상태: "paid" (결제완료)
-            foodCooking.setStatus(status); // 상태 변경
-            repository().save(foodCooking); // 수정
-        });
-    }
-```
-
-### 실제 주문했을 때 kafka 메시지 확인해보기
+### 1. 주문했을 때 Pub / Sub 확인해보기
 
 ![image](https://user-images.githubusercontent.com/70236767/205840137-4bfe31f3-53c6-4d66-af43-262b8e1c1dfd.png)
 
@@ -217,6 +162,65 @@ CQRS를 통해 주문 상태가 변경되는 이벤트가 발생할 때마다 vi
 ![image](https://user-images.githubusercontent.com/70236767/205804302-6ba3641f-9cf9-414c-aed9-50313efec5cb.png)
 
 ![image](https://user-images.githubusercontent.com/70236767/205804329-9488a15e-7da1-4f82-8808-dabf9eabde62.png)
+
+
+### 2. 결제 관련 Pub / Sub 코드 구현
+
+#### 결제 관련 Publish 코드 구현
+
+결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
+
+ordering 서비스: Payment.java
+
+```java
+    /**
+        결제가 이루어진 직후 호출 (PostPersist)
+     */
+    @PostPersist
+    public void onPostPersist(){
+        // Paid를 publish한다.
+        Paid paid = new Paid(this);
+        paid.publishAfterCommit();
+
+    }
+```
+
+#### 결제 관련 Subscribe 코드 구현
+
+store 서비스: PolicyHandler.java
+
+```java
+    /**
+        결제가 되었을 때 (Paid 이벤트) 상태를 변경한다.
+     */
+    @StreamListener(value=KafkaProcessor.INPUT, condition="headers['type']=='Paid'")
+    public void wheneverPaid_UpdateStatus(@Payload Paid paid){
+        Paid event = paid;
+        System.out.println("\n\n##### listener UpdateStatus : " + paid + "\n\n");
+
+        // Sample Logic //
+        // FoodCooking의 상태변경하기 (결제 완료 상태)
+        FoodCooking.updateStatus(event);
+    }
+```
+
+
+store 서비스: FoodCooking.java의 updateStatus(Paid paid) 구현
+
+```java
+    /**
+     *  주문 상태를 "paid"(결제완료) 로 업데이트한다.
+     *  @param: paid
+     */
+    public static void updateStatus(Paid paid){
+        repository().findById(paid.getOrderId()).ifPresent(foodCooking -> {
+            String status = "paid"; // 상태: "paid" (결제완료)
+            foodCooking.setStatus(status); // 상태 변경
+            repository().save(foodCooking); // 수정
+        });
+    }
+```
+
 
 
 ```java
