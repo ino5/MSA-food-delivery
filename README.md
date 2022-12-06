@@ -1,4 +1,339 @@
-# 
+![image](https://user-images.githubusercontent.com/487999/79708354-29074a80-82fa-11ea-80df-0db3962fb453.png)
+
+# 배달의 민족 : 마이크로서비스 분석/설계 및 구현 실습
+
+참고 템플릿: https://github.com/msa-ez/example-food-delivery
+
+
+
+# 서비스 시나리오
+
+배달의 민족 커버하기 - https://1sung.tistory.com/106
+
+기능적 요구사항
+1. 고객이 메뉴를 선택하여 주문한다
+1. 고객이 선택한 메뉴에 대해 결제한다.
+1. 주문이 되면 주문 내역이 입점상점주인에게 주문정보가 전달된다.
+1. 상점주는 주문을 수락하거나 거절할 수 있다.
+1. 상점주는 요리시작 때와 완료 시점에 시스템에 상태를 입력한다.
+1. 고객은 아직 요리가 시작되지 않은 주문은 취소할 수 있다.
+1. 요리가 완료되면 고객의 지역 인근의 라이더들에 의해 배송건 조회가 가능하다.
+1. 라이더가 해당 요리를 Pick한 후, 앱을 통해 통보한다.
+1. 고객이 주문상태를 중간중간 조회한다.
+1. 주문상태가 바뀔 때 마다 카톡으로 알림을 보낸다.
+1. 고객이 요리를 배달 받으면 배송확인 버튼을 탭하여, 모든 거래가 완료된다.
+
+
+비기능적 요구사항
+1. 트랜잭션
+    1. 결제가 되지 않은 주문건은 아예 거래가 성립되지 않아야 한다  Sync 호출 
+1. 장애격리
+    1. 상점관리 기능이 수행되지 않더라도 주문은 365일 24시간 받을 수 있어야 한다  Async (event-driven), Eventual Consistency
+    1. 결제시스템이 과중되면 사용자를 잠시동안 받지 않고 결제를 잠시후에 하도록 유도한다  Circuit breaker, fallback
+1. 성능
+    1. 고객이 자주 상점관리에서 확인할 수 있는 배달상태를 주문시스템(프론트엔드)에서 확인할 수 있어야 한다  CQRS
+    1. 배달상태가 바뀔때마다 카톡 등으로 알림을 줄 수 있어야 한다  Event driven
+
+
+# 체크포인트
+
+🎈 [분석/설계: 이벤트 스토밍](#-분석설계-이벤트-스토밍)
+
+🎈 새롭게 추가한 기능 2가지
+
+🎈 1. Saga (Pub / Sub)
+
+🎈 [2. CQRS](#-체크포인트2-cqrs)
+
+🎈 3. Compensation / Correlation
+
+🎈 4. Request / Response
+
+🎈 5. Circuit Breaker
+
+🎈 6. Gateway / Ingress
+
+
+
+
+
+## 🎈 분석/설계: 이벤트 스토밍
+
+![image](https://user-images.githubusercontent.com/70236767/205795328-411fbf9c-0ac4-4f04-8425-96670b4396f9.png)
+
+
+사진 파일 [링크](./myModeling.png)
+
+
+## 🎈 새롭게 추가한 기능 2가지
+
+### 1. 쿠폰
+
+![image](https://user-images.githubusercontent.com/70236767/205791378-37b8e704-1cac-4f66-ba96-079deb98e552.png)
+
+#### 쿠폰생성
+
+배달이 완료되면 rider 서비스에서 Delivered 이벤트가 발생하면서 publish 한다. 이 때 coupon 서비스에서 createCoupon 정책에 의해 CouponCreated 이벤트가 발생되면서 쿠폰이 생성된다.
+
+
+#### 쿠폰사용
+
+고객이 use 커맨드를 호출하여 쿠폰을 사용하면 CouponUsed 이벤트가 발생한다. 그리고 Req/Res 방식으로 ordering 서비스의 updateCoupon 커맨드를 호출하여 OrderUpdated 이벤트가 발생되면서 주문에 쿠폰이 적용된다.
+
+
+
+### 2. 주문 옵션 수정
+
+![image](https://user-images.githubusercontent.com/70236767/205794609-190d16b0-814f-4339-afb5-048c0fcbf19f.png)
+
+고객이 updateCoupon 커맨드를 호출하여 주문 옵션을 수정하면 OrderUpdated 이벤트가 발생하면서 publish한다. 이 때 updateOrder 정책에 의해 orderUpdated 이벤트가 발생되면서 주문 옵션이 수정된다.
+
+
+
+## 🎈 체크포인트1 Saga (Pub / Sub)
+
+### Publish
+
+결제가 이루어졌을 때 Payment의 @PostPersist 어노테이션이 설정되어있는 onPostPersist()에 의해 paid가 publish된다.
+
+Payment.java
+
+```java
+    /**
+        결제가 이루어진 직후 호출 (PostPersist)
+     */
+    @PostPersist
+    public void onPostPersist(){
+        // Paid를 publish한다.
+        Paid paid = new Paid(this);
+        paid.publishAfterCommit();
+
+    }
+```
+
+## 🎈 체크포인트2 CQRS
+
+## 🎈 체크포인트3 Compensation / Correlation
+
+## 🎈 체크포인트4 Request / Response
+
+![image](https://user-images.githubusercontent.com/70236767/205790898-e4a3aafc-f671-4478-946f-539551faa785.png)
+
+
+coupon context에서 쿠폰을 사용하면 req/res로 ordering context에 주문을 업데이트하여 쿠폰을 주문에 적용시킨다.
+
+
+
+### coupon context
+
+![image](https://user-images.githubusercontent.com/70236767/205777473-681e3afa-2b26-4ae1-88b9-421d78a978cd.png)
+
+
+Coupon.java
+
+```java
+    @PostPersist
+    public void onPostPersist(){
+        // CouponCreated couponCreated = new CouponCreated(this);
+        // couponCreated.publishAfterCommit();
+
+        // 쿠폰을 사용한다면 
+        if (isUsed == true) {
+
+            // ordering context에 동기 호출(req / res)
+
+            //Following code causes dependency to external APIs
+            // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.            
+            mall.external.Order order = new mall.external.Order().;
+            
+            // 동기 호출 할 때 coupon의 id와 order의 id 담아 보내기
+            order.setCouponId(this.getId()); // coupon id
+            order.setOrderId(this.getOrderId()); // order id
+            
+            // mappings goes here
+            CouponApplication.applicationContext.getBean(mall.external.OrderService.class)
+                .updateCoupon(order);
+
+            // couponUsed publish
+            CouponUsed couponUsed = new CouponUsed(this);
+            couponUsed.publishAfterCommit();
+        }
+    }
+```
+
+OrderService.java
+
+```java
+@FeignClient(name = "ordering", url = "${api.url.ordering}")
+public interface OrderService {
+    /**
+        쿠폰을 사용할 때 주문에 반영하기 위해  ordering context에 호출
+     */
+    @RequestMapping(method= RequestMethod.PATCH, path="/orders/{id}/updatecoupon)
+    public void updateCoupon(@RequestBody Order order);
+}
+
+
+```
+
+
+### ordering context
+
+OrderController
+
+```java
+    /**
+        주문에 쿠폰 적용
+     */
+    @RequestMapping(
+        value = "orders/{id}/updatecoupon",
+        method = RequestMethod.PUT,
+        produces = "application/json;charset=UTF-8"
+    )
+    public Order updateCoupon(
+        @PathVariable(value = "id") Long id,
+        @RequestBody UpdateCouponCommand updateCouponCommand,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws Exception {
+        System.out.println("##### /order/updateCoupon  called #####");
+        Optional<Order> optionalOrder = orderRepository.findById(id);
+
+        optionalOrder.orElseThrow(() -> new Exception("No Entity Found"));
+        Order order = optionalOrder.get();
+
+        // 주문에 쿠폰 적용
+        order.updateCoupon(updateCouponCommand);
+
+        orderRepository.save(order);
+        return order;
+    }
+```
+
+## 🎈 체크포인트5 Circuit Breaker
+
+Spring FeignClient + Hystrix를 이용하여 구현한다.
+
+Request/Response 통신 하는 프로젝트의 application.yml 파일에서 다음의 설정을 추가 (본 실습에서 테스트를 위해 default profile에 설정 추가)
+
+```yml
+feign:
+  hystrix:
+    enabled: true
+    
+hystrix:
+  command:
+    # 전역설정
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 610
+
+```
+
+본 설계에서는 쿠폰을 적용할 때 쿠폰 컨텍스트와 주 컨텍스트 사이의 연결을 RESTful Request/Response 로 연동하여 구현했다. 
+
+요청이 과도할 경우 Circuit Breaker 를 통하여 장애격리한다.
+
+Hystrix 설정
+```
+execution.isolation.thread.timeoutInMilliseconds: 610
+```
+
+요청처리 쓰레드에서 처리시간이 610 밀리가 넘어서기 시작하여 어느정도 유지되면 Circuit Breaker 회로가 닫히도록 (요청을 빠르게 실패처리, 차단) 설정
+
+
+
+## 🎈 체크포인트6 Gateway / Ingress
+
+### 로컬 설정
+
+context마다 포트번호를 다르게 설정하였다.
+
+```yml
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: ordering
+          uri: http://localhost:8081
+          predicates:
+            - Path=/orders/**, /payments/**, 
+        - id: store
+          uri: http://localhost:8082
+          predicates:
+            - Path=/foodCookings/**, 
+        - id: rider
+          uri: http://localhost:8083
+          predicates:
+            - Path=/deliveries/**, 
+        - id: customer
+          uri: http://localhost:8084
+          predicates:
+            - Path=, /mypages/**
+        - id: coupon
+          uri: http://localhost:8085
+          predicates:
+            - Path=/coupons/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+```
+
+### 
+
+```yml
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: ordering
+          uri: http://ordering:8080
+          predicates:
+            - Path=/orders/**, /payments/**, 
+        - id: store
+          uri: http://store:8080
+          predicates:
+            - Path=/foodCookings/**, 
+        - id: rider
+          uri: http://rider:8080
+          predicates:
+            - Path=/deliveries/**, 
+        - id: customer
+          uri: http://customer:8080
+          predicates:
+            - Path=, /mypages/**
+        - id: coupon
+          uri: http://coupon:8080
+          predicates:
+            - Path=/coupons/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+```
+
 
 ## Model
 www.msaez.io/#/storming/fa783b1b90dfa0eb180753d693a78c47
